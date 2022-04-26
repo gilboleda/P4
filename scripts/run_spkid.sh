@@ -13,9 +13,9 @@
 # - name_exp: name of the experiment
 # - db:       directory of the speecon database 
 lists=lists
-w=work
-name_exp=one
-db=spk_8mu/speecon
+w=work              #La carpeta que desto, podem canviar per fer algo completament nou
+name_exp=one        #Algo de hacer los pasos previos o no
+db=spk_8mu/speecon  #Base de dades
 
 # ------------------------
 # Usage
@@ -86,7 +86,8 @@ fi
 # - Select (or change) different features, options, etc. Make you best choice and try several options.
 
 compute_lp() {
-    for filename in $(cat $lists/class/all.train $lists/class/all.test); do
+#    for filename in $(cat $lists/class/all.train $lists/class/all.test); do
+    for filename in $(sort $lists/class/all.train $lists/class/all.test); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
         EXEC="wav2lp 8 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
         echo $EXEC && $EXEC || exit 1
