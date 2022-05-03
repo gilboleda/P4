@@ -94,6 +94,18 @@ compute_lp() {
     done
 }
 
+#Calcula los coeficientes de LPCC
+compute_lpcc() {
+
+    for filename in $(sort $lists/class/); do
+
+    done
+}
+
+compute_mfcc() {
+
+}
+
 
 #  Set the name of the feature (not needed for feature extraction itself)
 if [[ ! -n "$FEAT" && $# > 0 && "$(type -t compute_$1)" = function ]]; then
