@@ -95,16 +95,16 @@ compute_lp() {
 }
 
 #Calcula los coeficientes de LPCC
-compute_lpcc() {
+#compute_lpcc() {
 
-    for filename in $(sort $lists/class/); do
+#    for filename in $(sort $lists/class/); do
 
-    done
-}
+#    done
+#}
 
-compute_mfcc() {
+#compute_mfcc() {
 
-}
+#}
 
 
 #  Set the name of the feature (not needed for feature extraction itself)
@@ -135,7 +135,7 @@ for cmd in $*; do
        for dir in $db/BLOCK*/SES* ; do
            name=${dir/*\/}
            echo $name ----
-           gmm_train  -v 1 -T 0.001 -N5 -m 1 -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train || exit 1
+           gmm_train  -v 1 -T 0.001 -N5 -m 2 -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train || exit 1
            echo
        done
    elif [[ $cmd == test ]]; then
