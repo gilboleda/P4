@@ -16,7 +16,13 @@ lists=lists
 w=work              #La carpeta que desto, podem canviar per fer algo completament nou
 name_exp=one        #Algo de hacer los pasos previos o no
 db=spk_8mu/speecon  #Base de dades
+world=users
 
+#Objetivo:
+# Clasificaión por debajo de 0.5%
+# Verificación con un coste por debajo de 5
+WORLD_OPTS="-t 1.e-6 -N10 -m 5"
+TRAIN_OPTS="-T 1.e-6 -N10 -m 5"
 # ------------------------
 # Usage
 # ------------------------
@@ -135,7 +141,7 @@ for cmd in $*; do
        for dir in $db/BLOCK*/SES* ; do
            name=${dir/*\/}
            echo $name ----
-           gmm_train  -v 1 -T 0.001 -N5 -m 2 -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train || exit 1
+           gmm_train $TRAIN_OPTS -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train || exit 1
            echo
        done
    elif [[ $cmd == test ]]; then
@@ -158,7 +164,8 @@ for cmd in $*; do
 	   # Implement 'trainworld' in order to get a Universal Background Model for speaker verification
 	   #
 	   # - The name of the world model will be used by gmm_verify in the 'verify' command below.
-       echo "Implement the trainworld option ..."
+        gmm_train  $WORLD_OPTS -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm $lists/verif/$world.train || exit 1
+
    elif [[ $cmd == verify ]]; then
        ## @file
 	   # \TODO 
@@ -168,7 +175,7 @@ for cmd in $*; do
 	   #   For instance:
 	   #   * <code> gmm_verify ... > $w/verif_${FEAT}_${name_exp}.log </code>
 	   #   * <code> gmm_verify ... | tee $w/verif_${FEAT}_${name_exp}.log </code>
-       echo "Implement the verify option ..."
+       gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world lists/gmm.list lists/verif/all.test lists/verif/all.test.candidates | tee $w/verif_${FEAT}_${name_exp}.log
 
    elif [[ $cmd == verifyerr ]]; then
        if [[ ! -s $w/verif_${FEAT}_${name_exp}.log ]] ; then
