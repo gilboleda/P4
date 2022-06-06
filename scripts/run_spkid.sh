@@ -18,6 +18,15 @@ name_exp=one        #Algo de hacer los pasos previos o no
 db_dev=spk_8mu/speecon  #Base de dades
 db_final=spk_8mu/sr_test
 world=users
+## @file
+# \DONE Variables d'inici creades, son:
+# - lists:      directori amb les llistes
+# - w:          carpeta on es treballa amb arxius temporals
+# - name_exp:   Fer els pasos previs o no
+# - db_dev:     Base de dades dev
+# - db_final:   Base de dades final
+# - world:      World
+
 
 #Objetivo:
 # Clasificaión por debajo de 0.5%
@@ -113,13 +122,7 @@ compute_lpcc() {
     done
 }
 
-#
-# db=$1
-# shift
-# for filename in $(sort $*);
-#
-#
-
+# Calcula los coeficientes MFCC
 compute_mfcc() {
     for filename in $(sort $lists/class/all.train $lists/class/all.test); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
@@ -154,6 +157,7 @@ for cmd in $*; do
        ## @file
 	   # \TODO
 	   # Select (or change) good parameters for gmm_train
+       # \DONE Gmm Train is done
        for dir in $db_dev/BLOCK*/SES* ; do
            name=${dir/*\/}
            echo $name ----
@@ -180,6 +184,7 @@ for cmd in $*; do
 	   # Implement 'trainworld' in order to get a Universal Background Model for speaker verification
 	   #
 	   # - The name of the world model will be used by gmm_verify in the 'verify' command below.
+       # \DONE Trainworld is done
         gmm_train  $WORLD_OPTS -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm $lists/verif/$world.train || exit 1
 
    elif [[ $cmd == verify ]]; then
@@ -191,6 +196,7 @@ for cmd in $*; do
 	   #   For instance:
 	   #   * <code> gmm_verify ... > $w/verif_${FEAT}_${name_exp}.log </code>
 	   #   * <code> gmm_verify ... | tee $w/verif_${FEAT}_${name_exp}.log </code>
+       # \DONE Verify is done
        gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world lists/gmm.list lists/verif/all.test lists/verif/all.test.candidates | tee $w/verif_${FEAT}_${name_exp}.log
 
    elif [[ $cmd == verifyerr ]]; then
@@ -208,6 +214,7 @@ for cmd in $*; do
 	   # Perform the final test on the speaker classification of the files in spk_ima/sr_test/spk_cls.
 	   # The list of users is the same as for the classification task. The list of files to be
 	   # recognized is lists/final/class.test
+       # \DONE Finalclass is done
        compute_$FEAT $db_final $lists/final/class.test
        (gmm_classify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E fmm $lists/gmm.list $lists/final/class.test | tee class_test.log) || exit 1
    
@@ -218,6 +225,7 @@ for cmd in $*; do
 	   # The list of legitimate users is lists/final/verif.users, the list of files to be verified
 	   # is lists/final/verif.test, and the list of users claimed by the test files is
 	   # lists/final/verif.test.candidates
+       # \DONE Finalverif is done
        compute_$FEAT $db_final $lists/final/verif.test
        gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world lists/final/verif.users lists/final/verif.test lists/final/verif.test.candidates | tee $w/verif_test.log
         perl -ane 'print "$F[0]\t$F[1]\t";

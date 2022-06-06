@@ -219,7 +219,7 @@ namespace upc {
 
       // Maximization
       this->em_maximization(data, weights);
-
+      /// \DONE LOOP to perform EM
       if (verbose & 01)
 	cout << "GMM nmix=" << nmix << "\tite=" << iteration << "\tlog(prob)=" << new_prob << "\tinc=" << inc_prob << endl;
     }
