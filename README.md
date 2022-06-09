@@ -33,17 +33,52 @@ ejercicios indicados.
   principal (`sox`, `$X2X`, `$FRAME`, `$WINDOW` y `$LPC`). Explique el significado de cada una de las 
   opciones empleadas y de sus valores.
 
+  - **Sox**: Sox es un comando multiplataforma para trabajar con archivos de audio. Permite reproducir, grabar, leer y escribir en archivos de audio con distintos formatos. Va muy bien para trabajar con archivos de audio. Nosotros lo usamos par obtener coeficientes del audio de entrada.
+
+  - **$X2X**: En esta variable se guarda el comando _sptk x2x_ para Ubuntu, que és el que usamos los dos componentes de la pareja. El comando X2X se utilitza para convertir formatos de datos. Pasa de un formato x a un formato x, x to x. Nosotros lo usamos pasando de signed int a short (16bits). Luego en el recuento de filas también lo usamos para pasar a float.
+
+  - **$FRAME**: El comando _sptk frame_ se usa a continuación del _sptk x2x_. Este comando segmenta la secuencia i la divide en tramas. En nuestro caso són tramas de 240 muestras cada 80 muestras (superposición).
+
+  - **$WINDOW**: El comando _sptk window_, como el nombre indica, se usa para enventanar tramas de datos. Nosotros usamos la ventana Blackman con las ventanas de 240 muestras.
+
+  - **$LPC**: El comando _sptk lpc_ calcula los coeficientes LPC. En nuestro caso, el orden sale lo escojemos al llamar a _wav2lp.sh_.
+
+
+
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
-  salida de SPTK (líneas 45 a 47 del script `wav2lp.sh`).
+  salida de SPTK (líneas 45 a 48 del script `wav2lp.sh`).
+
+  Estas líneas de codigo son las encargadas de calcular cuantas columnas y cuantas filas tendra la matriz:
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  ncol=$((lpc_order+1)) # lpc p =>  (gain a1 a2 ... ap) 
+  nrow=$($X2X +fa < $base.lp | wc -l | perl -ne 'print $_/'$ncol', "\n";')
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Sabemos que tendremos tantas columnas como coeficientes LPC más 1 (el primero es ganancia). 
+  El número de columnas es un poco más complejo de obtener, convierte el archivo creado anteriormente a ascii i cuenta las líneass (filas).
+  Entonces cada fila corresponde a cada trama de la señal y las columnas a los coeficientes.
+
 
   * ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de
     entrada y cuál es el de resultado.
 
+    Guardar los datos en forma de matriz nos permite ver claramente los coeficientes de cada trama. Estan los datos bien estructurados y si trabajas bien con ellos es muy útil.
+
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
 
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+	$LPC -l 240 -m $lpc_order | $LPCC -m $lpc_order -M $lpcc_order > $base.lpcc
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>:
+
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+	$MFCC -l 240 -s 8 -w 1 -m $mfcc_order -n $mfcc_nfilter > $base.mfcc
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Extracción de características.
 
@@ -52,18 +87,43 @@ ejercicios indicados.
   
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
+
+  <img src="img/gmm_lp.png">
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  plot_gmm_feat -x2 -y3 work/gmm/lp/SES275.gmm work/lp/BLOCK27/SES275/SA275S*
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  <img src="img/gmm_lpcc.png">
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  plot_gmm_feat -x2 -y3 work/gmm/lpcc/SES275.gmm work/lpcc/BLOCK27/SES275/SA275S*
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  <img src="img/gmm_mfcc.png">
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  plot_gmm_feat -x 2 -y 3 work/gmm/mfcc/SES275.gmm work/mfcc/BLOCK27/SES275/SA275S*
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
   + ¿Cuál de ellas le parece que contiene más información?
+
+  La gráfica correspondiente a LP tiene muchos datos todos juntos y en una región más pequeña que las otras, por lo tanto tiene más correlación y menos información. La que tiene menos correlación és la de los coeficientes MFCC
 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
 
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] |      |      |      |
+  | &rho;<sub>x</sub>[2,3] | -0.503758 | 0.474305 | 0.388012 |
   
+  Locutor 275, (BLOCK27/SES275/)
+
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
+
+  Más o menos tiene sentido gráfico los resultados que nos salen. Los valores más grandes absolutamente són los valores de LP y LPCC. Podemos ver que estos dos están más concentrados mientras que los MFCC están más dispersos (incorrelados).
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+
+Deberiamos tener como mínimo 13 para LPCC y también para MFCC que también deberá tener más de 24 filtros.
 
 ### Entrenamiento y visualización de los GMM.
 
@@ -71,6 +131,8 @@ Complete el código necesario para entrenar modelos GMM.
 
 - Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor
   para sus dos primeros coeficientes de MFCC.
+
+  
   
 - Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad

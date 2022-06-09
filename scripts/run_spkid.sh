@@ -31,8 +31,8 @@ world=users
 #Objetivo:
 # Clasificaión por debajo de 0.5%
 # Verificación con un coste por debajo de 5
-WORLD_OPTS="-t 1.e-6 -N10 -m 5"
-TRAIN_OPTS="-T 1.e-6 -N10 -m 5"
+WORLD_OPTS="-T 1.e-6 -N200 -m29 -i2 -v0"
+TRAIN_OPTS="-T 1.e-6 -N100 -m20 -i1 -v0"
 # ------------------------
 # Usage
 # ------------------------
@@ -105,7 +105,7 @@ compute_lp() {
 #    for filename in $(cat $lists/class/all.train $lists/class/all.test); do
     for filename in $(sort $lists/class/all.train $lists/class/all.test); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2lp 8 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
+        EXEC="wav2lp 18 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -117,7 +117,7 @@ compute_lpcc() {
 #    for filename in $(sort $lists/class/all.train $lists/class/all.test); do
     for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2lpcc 15 8 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
+        EXEC="wav2lpcc 19 19 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -126,7 +126,7 @@ compute_lpcc() {
 compute_mfcc() {
     for filename in $(sort $lists/class/all.train $lists/class/all.test); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2mfcc 8 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
+        EXEC="wav2mfcc 25 35 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -185,7 +185,7 @@ for cmd in $*; do
 	   #
 	   # - The name of the world model will be used by gmm_verify in the 'verify' command below.
        # \DONE Trainworld is done
-        gmm_train  $WORLD_OPTS -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm $lists/verif/$world.train || exit 1
+        gmm_train  $WORLD_OPTS -i 2 -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm $lists/verif/$world.train || exit 1
 
    elif [[ $cmd == verify ]]; then
        ## @file
