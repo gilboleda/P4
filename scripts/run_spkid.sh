@@ -31,8 +31,8 @@ world=users
 #Objetivo:
 # Clasificaión por debajo de 0.5%
 # Verificación con un coste por debajo de 5
-WORLD_OPTS="-T 1.e-6 -N200 -m29 -i2 -v0"
-TRAIN_OPTS="-T 1.e-6 -N100 -m20 -i1 -v0"
+WORLD_OPTS="-T 1.e-7 -N200 -m29 -i2 -v0"
+TRAIN_OPTS="-T 1.e-6 -N80 -m17 -i1 -n40 -t1e-4 -v0"
 # ------------------------
 # Usage
 # ------------------------
@@ -117,7 +117,7 @@ compute_lpcc() {
 #    for filename in $(sort $lists/class/all.train $lists/class/all.test); do
     for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2lpcc 19 19 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
+        EXEC="wav2lpcc 22 24 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
         echo $EXEC && $EXEC || exit 1
     done
 }
