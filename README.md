@@ -89,19 +89,16 @@ ejercicios indicados.
     parametrizadas.
 
   <img src="img/gmm_lp.png">
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
   plot_gmm_feat -x2 -y3 work/gmm/lp/SES275.gmm work/lp/BLOCK27/SES275/SA275S*
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  <br>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   <img src="img/gmm_lpcc.png">
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
   plot_gmm_feat -x2 -y3 work/gmm/lpcc/SES275.gmm work/lpcc/BLOCK27/SES275/SA275S*
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  <br>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   <img src="img/gmm_mfcc.png">
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
   plot_gmm_feat -x 2 -y 3 work/gmm/mfcc/SES275.gmm work/mfcc/BLOCK27/SES275/SA275S*
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  <br>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
   + ¿Cuál de ellas le parece que contiene más información?
@@ -149,7 +146,7 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] | 11.72% | 0.89% | 1.91% |
+  | Resultado class | 11.72% | 0.89% | 1.91% |
 
 
 ### Verificación del locutor.
@@ -163,7 +160,7 @@ Complete el código necesario para realizar verificación del locutor y optimice
  
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] | 68.9 | 11.2 | 29.2 |
+  | Resultado verif | 68.9 | 11.2 | 29.2 |
 
 
 ### Test final
