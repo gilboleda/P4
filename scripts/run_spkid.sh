@@ -18,11 +18,7 @@ name_exp=one        #Algo de hacer los pasos previos o no
 db_dev=spk_8mu/speecon  #Base de dades
 db_final=spk_8mu/sr_test
 world=users
-<<<<<<< HEAD
-db=spk_8mu/speecon
-=======
 #db=spk_8mu/speecon
->>>>>>> aeb4e9e68272f02051f2e581d1d7be412715725f
 ## @file
 # \DONE Variables d'inici creades, son:
 # - lists:      directori amb les llistes
