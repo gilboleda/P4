@@ -18,6 +18,7 @@ name_exp=one        #Algo de hacer los pasos previos o no
 db_dev=spk_8mu/speecon  #Base de dades
 db_final=spk_8mu/sr_test
 world=users
+db=spk_8mu/speecon
 ## @file
 # \DONE Variables d'inici creades, son:
 # - lists:      directori amb les llistes
@@ -31,8 +32,8 @@ world=users
 #Objetivo:
 # Clasificaión por debajo de 0.5%
 # Verificación con un coste por debajo de 5
-WORLD_OPTS="-T 1.e-7 -N200 -m29 -i2 -v0"
-TRAIN_OPTS="-T 1.e-6 -N80 -m17 -i1 -n40 -t1e-4 -v0"
+WORLD_OPTS="-T 1.e-7 -N120 -m30 -i2 -v1"
+TRAIN_OPTS="-T 1.e-6 -N100 -m25 -i1 -n40 -t1.e-4 -v0"
 # ------------------------
 # Usage
 # ------------------------
@@ -102,7 +103,7 @@ fi
 # - Select (or change) different features, options, etc. Make you best choice and try several options.
 
 compute_lp() {
-#    for filename in $(cat $lists/class/all.train $lists/class/all.test); do
+#    for filename in $(cat $lists/cl    ass/all.train $lists/class/all.test); do
     for filename in $(sort $lists/class/all.train $lists/class/all.test); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
         EXEC="wav2lp 18 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
