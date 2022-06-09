@@ -163,13 +163,15 @@ Complete el código necesario para realizar verificación del locutor y optimice
  
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] | 11.72% | 11.2 | 29.2 |
+  | &rho;<sub>x</sub>[2,3] | 68.9 | 11.2 | 29.2 |
 
 
 ### Test final
 
 - Adjunte, en el repositorio de la práctica, los ficheros `class_test.log` y `verif_test.log` 
   correspondientes a la evaluación *ciega* final.
+
+  Adjuntados
 
 ### Trabajo de ampliación.
 
