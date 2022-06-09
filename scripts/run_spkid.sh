@@ -18,7 +18,11 @@ name_exp=one        #Algo de hacer los pasos previos o no
 db_dev=spk_8mu/speecon  #Base de dades
 db_final=spk_8mu/sr_test
 world=users
+<<<<<<< HEAD
 db=spk_8mu/speecon
+=======
+#db=spk_8mu/speecon
+>>>>>>> aeb4e9e68272f02051f2e581d1d7be412715725f
 ## @file
 # \DONE Variables d'inici creades, son:
 # - lists:      directori amb les llistes
@@ -106,7 +110,7 @@ compute_lp() {
 #    for filename in $(cat $lists/cl    ass/all.train $lists/class/all.test); do
     for filename in $(sort $lists/class/all.train $lists/class/all.test); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2lp 18 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
+        EXEC="wav2lp 18 $db_dev/$filename.wav $w/$FEAT/$filename.$FEAT"
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -118,7 +122,7 @@ compute_lpcc() {
 #    for filename in $(sort $lists/class/all.train $lists/class/all.test); do
     for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2lpcc 22 24 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
+        EXEC="wav2lpcc 22 24 $db_dev/$filename.wav $w/$FEAT/$filename.$FEAT"
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -127,7 +131,7 @@ compute_lpcc() {
 compute_mfcc() {
     for filename in $(sort $lists/class/all.train $lists/class/all.test); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2mfcc 25 35 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
+        EXEC="wav2mfcc 25 35 $db_dev/$filename.wav $w/$FEAT/$filename.$FEAT"
         echo $EXEC && $EXEC || exit 1
     done
 }
