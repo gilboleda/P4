@@ -32,7 +32,7 @@ world=users
 #Objetivo:
 # Clasificaión por debajo de 0.5%
 # Verificación con un coste por debajo de 5
-WORLD_OPTS="-T 1.e-6 -N130 -m32 -i2 -v1"
+WORLD_OPTS="-T 1.e-7 -N120 -m30 -i2 -n40 -v1"
 TRAIN_OPTS="-T 1.e-6 -N100 -m25 -i1 -n40 -t1.e-4 -v0"
 # ------------------------
 # Usage
