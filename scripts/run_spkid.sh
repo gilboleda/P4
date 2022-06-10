@@ -217,7 +217,7 @@ for cmd in $*; do
 	   # recognized is lists/final/class.test
        # \DONE Finalclass is done
        compute_$FEAT $db_final $lists/final/class.test
-       (gmm_classify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E fmm $lists/gmm.list $lists/final/class.test | tee class_test.log) || exit 1
+       (gmm_classify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm $lists/gmm.list $lists/final/class.test | tee class_test.log) || exit 1
    
    elif [[ $cmd == finalverif ]]; then
        ## @file
